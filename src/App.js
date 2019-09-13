@@ -1,10 +1,11 @@
-import React from 'react';
+import React from 'react'
 import Header from './containers/Header/Header';
 import Genres from './containers/Genres/Genres';
 import {
   BrowserRouter as Router,
   Route
 } from 'react-router-dom';
+import RegisterGenre from './containers/RegisterGenre/RegisterGenre';
 
 const Home = () => { return (<h1>Home</h1>) };
 
@@ -14,7 +15,8 @@ function App() {
       <Router>
         <Header />
         <Route component={Home} exact path='/' />
-        <Route component={Genres} path='/genres' />
+        <Route component={Genres} exact path='/genres' />
+        <Route component={RegisterGenre} exact path='/genres/new' />
       </Router>
     </div>
   );

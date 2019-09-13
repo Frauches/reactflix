@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Axios from 'axios';
 
 
@@ -25,7 +26,8 @@ function Genres() {
   return (
     <div>
       <h1>Genres</h1>
-      <table class="table table-dark table-striped  ">
+      <div><Link to="/genres/new">Novo Gênero</Link></div>
+      <table className="table table-dark table-striped  ">
         <thead>
           <tr>
             <th scope="col">ID</th>

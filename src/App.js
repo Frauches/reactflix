@@ -6,6 +6,7 @@ import {
   Route
 } from 'react-router-dom';
 import RegisterGenre from './containers/RegisterGenre/RegisterGenre';
+import EditGenre from './containers/EditGenre/EditGenre';
 
 const Home = () => { return (<h1>Home</h1>) };
 
@@ -16,11 +17,11 @@ function App() {
         <Header />
         <Route component={Home} exact path='/' />
         <Route component={Genres} exact path='/genres' />
+        <Route component={EditGenre} exact path='/genres/:id'/>
         <Route component={RegisterGenre} exact path='/genres/new' />
       </Router>
     </div>
   );
 }
-
 export default App;
 

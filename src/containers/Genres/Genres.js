@@ -25,7 +25,10 @@ function Genres() {
       <tr key={genre.id}>
         <th scope="row">{genre.id}</th>
         <td>{genre.name}</td>
-        <td><button onClick={() => deleteGenre(genre.id)}>-</button></td>
+        <td>
+          <Link className="btn btn-warning" to={"/genres/" + genre.id}>Edit</Link>  
+          <button className="btn btn-danger" onClick={() => deleteGenre(genre.id)}>Remove</button>
+        </td>
       </tr>);
   }
 

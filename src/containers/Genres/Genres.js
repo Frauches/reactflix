@@ -13,12 +13,19 @@ function Genres() {
     })
   }, []);
 
+  const deleteGenre = (genreId) => {
+    Axios.delete('/api/genres/' + genreId)
+      .then(res => {
+        setGenres(genres.filter(genre => genre.id !== genreId));
+      });
+  }
+
   function renderTableData(genre) {
     return (
       <tr key={genre.id}>
         <th scope="row">{genre.id}</th>
         <td>{genre.name}</td>
-        <td><button>+</button></td>
+        <td><button onClick={() => deleteGenre(genre.id)}>-</button></td>
       </tr>);
   }
 

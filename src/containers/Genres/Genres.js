@@ -34,9 +34,9 @@ function Genres() {
 
 
   return (
-    <div>
+    <div className="container">
       <h1>Genres</h1>
-      <div><Link to="/genres/new">Novo Gênero</Link></div>
+      <Link to="/genres/new"><button className="btn btn-primary">Novo Gênero</button></Link>
       <table className="table table-dark table-striped  ">
         <thead>
           <tr>

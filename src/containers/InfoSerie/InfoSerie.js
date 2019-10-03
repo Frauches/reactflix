@@ -10,6 +10,7 @@ function InfoSerie({ match }) {
   const [success, setSuccess] = useState(false);
   const [mode, setMode] = useState('EDIT');
   const [genres, setGenres] = useState([]);
+  const [genreIdSelected, setGenreIdSelected] = useState('');
 
   useEffect(() => {
     Axios.get('/api/series/' + match.params.id).then((res) => {
@@ -21,8 +22,17 @@ function InfoSerie({ match }) {
   useEffect(() => {
     Axios.get('/api/genres/').then(res => {
       setGenres(res.data.data)
+      const genres = res.data.data;
+      const found = genres.find(value => data.genre === value.name);
+
+      if (found) {
+        setGenreIdSelected({
+          ...form,
+          genre_id: found.id
+        })
+      }
     })
-  }, [])
+  }, [data])
 
 
   const handleChange = field => (event) => {
@@ -32,11 +42,25 @@ function InfoSerie({ match }) {
     });
   }
 
+  const handleChangeGenre = event => {
+    setGenreIdSelected(event.target.value);
+  }
+
+  const selectOption = value => () => {
+    setForm({
+      ...form,
+      status: value
+    });
+  }
+
   const saveSerie = (event) => {
     event.preventDefault();
     Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-    Axios.put('/api/series/' + match.params.id, form).then((res) => {
+    Axios.put('/api/series/' + match.params.id, {
+      ...form,
+      genre_id: genreIdSelected
+    }).then((res) => {
       setSuccess(true);
     });
 
@@ -70,10 +94,11 @@ function InfoSerie({ match }) {
                 <h1 className="font-weight-light text-white">{data.name}</h1>
                 <div className="lead text-white">
                   {
-                    data.status == 'WATCHED'
+                    data.status === 'ASSISTIDO'
                       ? <Badge color="success">Assistido</Badge>
-                      : <Badge color="warning">Não Assistido</Badge>
+                      : <Badge color="warning">Para Assistir</Badge>
                   }
+                  Gênero: {data.genre}
                 </div>
               </div>
             </div>
@@ -99,20 +124,20 @@ function InfoSerie({ match }) {
             </div>
             <div class="form-group">
               <label htmlFor="genre">Genre</label>
-              <select class="form-control" id="genre" onChange={(event) => handleChange('genre_id')(event)}>
-                {genres.map(genre => { return (<option key={genre.id} select={genre.id === form.genre} value={genre.id}>{genre.name}</option>)})}
+              <select class="form-control" id="genre" value={genreIdSelected} onChange={(event) => handleChangeGenre(event)}>
+                {genres.map(genre => { return (<option key={genre.id} value={genre.id}>{genre.name}</option>) })}
               </select>
             </div>
             <div className="form-check">
-              <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked/>
-              <label claclassNamess="form-check-label" htmlFor="exampleRadios1">
-                Default radio
+              <input className="form-check-input" checked={form.status === 'ASSISTIDO'} type="radio" name="status" id="watched" value="ASSISTIDO" onClick={selectOption('ASSISTIDO')}/>
+              <label claclassNamess="form-check-label" htmlFor="watched">
+                Watched
               </label>
             </div>
             <div className="form-check">
-              <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2"/>
-              <label className="form-check-label" htmlFor="exampleRadios2">
-                Second default radio
+              <input className="form-check-input" checked={form.status === 'PARA_ASSISTIR'} type="radio" name="status" id="toWatch"  value="PARA_ASSISTIR" onClick={selectOption('PARA_ASSISTIR')}/>
+              <label className="form-check-label" htmlFor="toWatch">
+                To Watch
               </label>
             </div>
             <button onClick={saveSerie} type="submit" className="btn btn-primary">Save</button>

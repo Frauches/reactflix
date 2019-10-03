@@ -9,7 +9,7 @@ import {
 import RegisterGenre from './containers/RegisterGenre/RegisterGenre';
 import EditGenre from './containers/EditGenre/EditGenre';
 import RegisterSerie from './containers/RegisterSerie/RegisterSerie';
-
+import InfoSerie from './containers/InfoSerie/InfoSerie';
 
 const Home = () => { return (<h1>Home</h1>) };
 
@@ -25,6 +25,7 @@ function App() {
           <Route component={EditGenre} exact path='/genres/:id' />
           <Route component={Series} exact path='/series' />
           <Route component={RegisterSerie} exact path='/series/new' />
+          <Route component={InfoSerie} exact path='/series/:id' />
         </Switch>
       </Router>
     </div>

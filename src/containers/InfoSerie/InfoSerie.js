@@ -6,17 +6,19 @@ import { Badge } from 'reactstrap';
 
 function InfoSerie({ match }) {
   const [data, setData] = useState('');
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({name: ''});
   const [success, setSuccess] = useState(false);
   const [mode, setMode] = useState('EDIT');
-  const [genres, setGenres] = useState([]);
+  const [genres, setGenres] = useState(new Array());
   const [genreIdSelected, setGenreIdSelected] = useState('');
 
   useEffect(() => {
-    Axios.get('/api/series/' + match.params.id).then((res) => {
-      setData(res.data);
-      setForm(res.data);
-    })
+    if (match.params.id) {
+      Axios.get('/api/series/' + match.params.id).then((res) => {
+        setData(res.data);
+        setForm(res.data);
+      })
+    }
   }, [match.params.id]);
 
   useEffect(() => {
@@ -24,7 +26,6 @@ function InfoSerie({ match }) {
       setGenres(res.data.data)
       const genres = res.data.data;
       const found = genres.find(value => data.genre === value.name);
-
       if (found) {
         setGenreIdSelected({
           ...form,
@@ -105,13 +106,12 @@ function InfoSerie({ match }) {
           </div>
         </div>
       </header>
-      <div><button className="btn btn-primary" onClick={() => setMode('EDIT')}>Edit</button></div>
+      <div className="container"><button className="btn btn-primary" onClick={() => setMode('EDIT')}>Edit</button></div>
       {
         mode === 'EDIT' &&
 
         <div className="container">
           <h1>New Serie</h1>
-          <pre>{JSON.stringify(form)}</pre>
           <button className="btn btn-primary" onClick={() => setMode('INFO')}>Cancel Edit</button>
           <form>
             <div className="form-group">
@@ -122,20 +122,20 @@ function InfoSerie({ match }) {
               <label htmlFor="comments">Comments</label>
               <input type="text" value={form.comments} onChange={(event) => handleChange('comments')(event)} className="form-control" id="comment" placeholder="Comment" />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <label htmlFor="genre">Genre</label>
-              <select class="form-control" id="genre" value={genreIdSelected} onChange={(event) => handleChangeGenre(event)}>
+              <select className="form-control" id="genre" value={genreIdSelected} onChange={(event) => handleChangeGenre(event)}>
                 {genres.map(genre => { return (<option key={genre.id} value={genre.id}>{genre.name}</option>) })}
               </select>
             </div>
             <div className="form-check">
-              <input className="form-check-input" checked={form.status === 'ASSISTIDO'} type="radio" name="status" id="watched" value="ASSISTIDO" onClick={selectOption('ASSISTIDO')}/>
-              <label claclassNamess="form-check-label" htmlFor="watched">
+              <input className="form-check-input" checked={form.status === 'ASSISTIDO'} type="radio" name="status" id="watched" value="ASSISTIDO" onChange={selectOption('ASSISTIDO')} />
+              <label className="form-check-label" htmlFor="watched">
                 Watched
               </label>
             </div>
             <div className="form-check">
-              <input className="form-check-input" checked={form.status === 'PARA_ASSISTIR'} type="radio" name="status" id="toWatch"  value="PARA_ASSISTIR" onClick={selectOption('PARA_ASSISTIR')}/>
+              <input className="form-check-input" checked={form.status === 'PARA_ASSISTIR'} type="radio" name="status" id="toWatch" value="PARA_ASSISTIR" onChange={selectOption('PARA_ASSISTIR')} />
               <label className="form-check-label" htmlFor="toWatch">
                 To Watch
               </label>
